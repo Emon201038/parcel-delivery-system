@@ -28,7 +28,8 @@ app.use(
     origin: [
       "http://localhost:3000",
       "http://localhost:5173",
-      "https://assignment-6-snowy-nine.vercel.app",
+      "https://parcel-delivery-system-tau.vercel.app",
+      envVars.CLIENT_URL,
     ],
     credentials: true,
   })

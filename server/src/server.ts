@@ -5,7 +5,6 @@ import app from "./app";
 import { envVars } from "./app/config/env";
 import { connectRedis } from "./app/config/redis.config";
 
-
 let server: Server;
 
 const startServer = async () => {
@@ -14,7 +13,7 @@ const startServer = async () => {
 
     server = app.listen(envVars.PORT, () => {
       console.log(`Server is running on port ${envVars.PORT}`);
-    })
+    });
   } catch (error) {
     console.log(error);
     process.exit(1);
@@ -25,7 +24,6 @@ const startServer = async () => {
   await connectRedis();
   await startServer();
 })();
-
 
 process.on("unhandledRejection", (error) => {
   if (server) {
@@ -61,4 +59,4 @@ process.on("SIGINT", () => {
   if (server) {
     server.close();
   }
-})
+});
