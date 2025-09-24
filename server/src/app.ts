@@ -29,6 +29,7 @@ app.use(
       "http://localhost:3000",
       "http://localhost:5173",
       "https://parcel-delivery-system-tau.vercel.app",
+      "https://assignment-6-snowy-nine.vercel.app",
       envVars.CLIENT_URL,
     ],
     credentials: true,
