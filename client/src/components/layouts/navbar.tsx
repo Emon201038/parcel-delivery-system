@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { User, LogOut, History } from "lucide-react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useState } from "react";
 import { useSession } from "@/providers/auth-provider";
 import { type IUser } from "@/types";
@@ -24,12 +24,16 @@ export function Navbar() {
   const [logout] = useLogoutMutation();
   const dispatch = useAppDispatch();
 
+  const navigate = useNavigate();
+
   const isAuthenticated = session?.data?._id ? true : false;
   const user: IUser | undefined = session?.data;
   const handleLogout = async () => {
     await logout(null);
     dispatch(authApi.util.resetApiState());
     setIsDropdownOpen(false);
+
+    navigate("/login");
   };
 
   const getDashboardLink = () => {

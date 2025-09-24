@@ -30,6 +30,7 @@ const NavbarDrawer: React.FC<Props> = ({ isOpen, setIsOpen }) => {
     await logout(null);
     dispatch(authApi.util.resetApiState());
     session?.refetch?.();
+
     navigate("/login");
   };
 

@@ -8,9 +8,11 @@ import { Button } from "./ui/button";
 import { Form } from "./ui/form";
 import { useLoginMutation } from "@/redux/features/auth/authApi";
 import { UserRole } from "@/types";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { useSession } from "@/providers/auth-provider";
 import { RHFInput } from "./rhf-input";
+import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
+import { MessageSquareWarningIcon } from "lucide-react";
 
 interface Props {}
 
@@ -30,6 +32,7 @@ const LoginForm: React.FC<Props> = () => {
     },
   });
   const navitage = useNavigate();
+  const location = useLocation();
   const session = useSession();
   const [login, { isLoading, isError, error }] = useLoginMutation();
 
@@ -51,15 +54,23 @@ const LoginForm: React.FC<Props> = () => {
       });
       await session.refetch?.();
 
+      console.log(result, "result");
+
       // Redirect based on role
       const dashboardPath =
-        result.role === UserRole.ADMIN
+        result?.user?.role === UserRole.ADMIN
           ? "/dashboard/admin"
-          : result.role === UserRole.SUPER_ADMIN
+          : result?.user?.role === UserRole.SUPER_ADMIN
           ? "/dashboard/admin"
-          : result.role === UserRole.SENDER
+          : result?.user?.role === UserRole.SENDER
           ? "/dashboard/sender"
           : "/dashboard/receiver";
+
+      const searchParams = new URLSearchParams(location.search);
+      const callbackUrl = searchParams.get("callbackUrl");
+      if (callbackUrl) {
+        navitage(callbackUrl);
+      }
 
       navitage(dashboardPath);
     } catch (error: any) {
@@ -67,6 +78,21 @@ const LoginForm: React.FC<Props> = () => {
         description: error.data?.message || "Invalid email or password",
       });
     }
+  };
+
+  const receiverUserLogin = () => {
+    form.setValue("email", import.meta.env.VITE_RECEIVER_MAIL as string);
+    form.setValue("password", import.meta.env.VITE_RECEIVER_PASSWORD as string);
+  };
+
+  const adminUserLogin = () => {
+    form.setValue("email", import.meta.env.VITE_ADMIN_MAIL as string);
+    form.setValue("password", import.meta.env.VITE_ADMIN_PASSWORD as string);
+  };
+
+  const senderUserLogin = () => {
+    form.setValue("email", import.meta.env.VITE_SENDER_MAIL as string);
+    form.setValue("password", import.meta.env.VITE_SENDER_PASSWORD as string);
   };
 
   return (
@@ -98,6 +124,40 @@ const LoginForm: React.FC<Props> = () => {
         <Button type="submit" className="w-full" disabled={isLoading}>
           {isLoading ? "Signing in..." : "Sign In"}
         </Button>
+
+        <Alert variant="default">
+          <MessageSquareWarningIcon />
+          <AlertTitle>For Testing only!</AlertTitle>
+          <AlertDescription className="w-full">
+            <p>Please, do not missuse this form for testing purposes.</p>
+            <div className="flex flex-wrap justify-center items-center gap-2 w-full">
+              <Button
+                type="button"
+                onClick={receiverUserLogin}
+                variant={"outline"}
+                className="w-full cursor-pointer"
+              >
+                Receiver User Login
+              </Button>
+              <Button
+                type="button"
+                onClick={senderUserLogin}
+                variant={"outline"}
+                className="w-full cursor-pointer"
+              >
+                Sender User Login
+              </Button>
+              <Button
+                type="button"
+                onClick={adminUserLogin}
+                variant={"outline"}
+                className="w-full cursor-pointer"
+              >
+                Admin Login
+              </Button>
+            </div>
+          </AlertDescription>
+        </Alert>
       </form>
     </Form>
   );

@@ -4,7 +4,7 @@ import type { IResponse, IUser } from "@/types";
 const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation<
-      IUser & { accessToken: string; refreshToken: string },
+      { accessToken: string; refreshToken: string; user: IUser },
       { email: string; password: string }
     >({
       query: (credentials) => ({
@@ -13,9 +13,11 @@ const authApi = baseApi.injectEndpoints({
         data: credentials,
       }),
       transformResponse: (
-        response: IResponse<
-          IUser & { accessToken: string; refreshToken: string }
-        >
+        response: IResponse<{
+          accessToken: string;
+          refreshToken: string;
+          user: IUser;
+        }>
       ) => response.data,
     }),
 

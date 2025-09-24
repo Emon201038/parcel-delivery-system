@@ -6,24 +6,41 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Package } from "lucide-react";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import LoginForm from "@/components/LoginForm";
 import { useEffect } from "react";
 import { useSession } from "@/hooks/session";
 import { Button } from "@/components/ui/button";
+import { UserRole } from "@/types";
 
 export default function LoginPage() {
   document.title = "Login | ParcelPro";
   const session = useSession();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     if (session?.data?._id && !session?.isLoading) {
-      navigate("/");
+      navigate(getNavigateRoute(session.data.role));
     }
   }, [session]);
 
   if (session?.isLoading) return <div>Loading...</div>;
+
+  const getNavigateRoute = (role: UserRole) => {
+    const searchParams = new URLSearchParams(location.search);
+    const callbackUrl = searchParams.get("callbackUrl");
+    if (callbackUrl) {
+      return callbackUrl;
+    }
+
+    if (role === UserRole.ADMIN) return "/dashboard/admin";
+    if (role === UserRole.SUPER_ADMIN) return "/dashboard/admin";
+    if (role === UserRole.SENDER) return "/dashboard/sender";
+    if (role === UserRole.RECEIVER) return "/dashboard/receiver";
+
+    return "/";
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">

@@ -24,10 +24,12 @@ export function AuthGuard({
   useEffect(() => {
     if (requireAuth && !isAuthenticated && !session?.isLoading) {
       navigate("/login");
+      console.log("unauthenticated");
       return;
     }
 
     if (allowedRoles && user && !allowedRoles.includes(user.role)) {
+      console.log("unauthorized");
       navigate("/unauthorized");
       return;
     }
