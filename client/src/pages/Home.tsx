@@ -1,3 +1,5 @@
+import { AnimatedSection } from "@/components/animated-section";
+import InfiniteBrandCarousel from "@/components/infinite_brand_carousel";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -6,15 +8,36 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Package, Truck, Shield, Clock } from "lucide-react";
-import { Link } from "react-router";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Package, Truck, Shield, Clock, Search } from "lucide-react";
+import { Link, useNavigate } from "react-router";
 
 export default function HomePage() {
   document.title = "Home | ParcelPro";
+
+  const navigate = useNavigate();
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    navigate(
+      `/track?${new URLSearchParams({
+        q: formData.get("trackingId") as string,
+      }).toString()}`
+    );
+  };
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary/5 to-secondary/5 py-20">
+      <section
+        className="bg-gradient-to-br from-primary/5 to-secondary/5 py-20"
+        // style={{
+        //   backgroundImage: `url(/images/banner.jpg)`,
+        //   backgroundPosition: "center",
+        //   backgroundRepeat: "no-repeat",
+        // }}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
             Fast & Reliable
@@ -30,17 +53,41 @@ export default function HomePage() {
                 Get Started
               </Button>
             </Link>
-            <Link to="/track">
-              <Button
-                variant="outline"
-                size="lg"
-                className="w-full sm:w-auto bg-transparent"
-              >
-                Track Package
-              </Button>
-            </Link>
           </div>
         </div>
+      </section>
+
+      {/* Tracking Section */}
+      <section className="px-4 w-full flex justify-center items-center">
+        <Card className="max-w-4xl w-full">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Search className="h-5 w-5" />
+              Parcel Tracking
+            </CardTitle>
+            <CardDescription>
+              Enter your tracking ID to view detailed parcel information and
+              status updates
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="flex gap-4">
+              <div className="flex-1">
+                <Label htmlFor="trackingId" className="sr-only">
+                  Tracking ID
+                </Label>
+                <Input
+                  type="text"
+                  id="trackingId"
+                  name="trackingId"
+                  placeholder="Enter tracking ID (e.g., TRK-20250731-2075JZ)"
+                  required
+                />
+              </div>
+              <Button type="submit">Track Parcel</Button>
+            </form>
+          </CardContent>
+        </Card>
       </section>
 
       {/* Features Section */}
@@ -112,6 +159,23 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* How It Works Section */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-background">
+        <div className="max-w-6xl mx-auto space-y-16">
+          <AnimatedSection
+            title="How It Works"
+            description="Our streamlined process makes sending parcels incredibly easy. Simply book your delivery, pack your items, and we handle the rest. Our professional team ensures your parcels reach their destination safely and on time."
+            gifUrl="/images/parcel-delivery-process-animation.jpg"
+          />
+
+          <AnimatedSection
+            title="Secure & Reliable"
+            description="We prioritize the safety of your parcels with secure packaging, insured deliveries, and professional handling. Our trained delivery personnel ensure your items are treated with care."
+            gifUrl="/images/secure-delivery-animation.jpg"
+          />
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="bg-primary py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -128,6 +192,12 @@ export default function HomePage() {
             </Button>
           </Link>
         </div>
+      </section>
+
+      {/* Top Enterprises */}
+      <section className="mt-4 px-4">
+        <h1 className="text-xl opacity-70 text-center">Top Enterprises</h1>
+        <InfiniteBrandCarousel />
       </section>
     </div>
   );
