@@ -122,3 +122,16 @@
 input:-webkit-autofill {
   background-color: transparent;
 }
+
+@keyframes scroll {
+  from {
+    transform: translate(0);
+  }
+  to {
+    transform: translate(-100%);
+  }
+}
+
+.animate-scroll {
+  animation: scroll 20s linear infinite;
+}
