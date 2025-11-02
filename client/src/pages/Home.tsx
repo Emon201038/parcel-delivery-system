@@ -1,4 +1,5 @@
 import { AnimatedSection } from "@/components/animated-section";
+import { FAQ } from "@/components/FAQ";
 import InfiniteBrandCarousel from "@/components/infinite_brand_carousel";
 import { Button } from "@/components/ui/button";
 import {
@@ -176,6 +177,17 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Top Enterprises */}
+      <section className="mt-4 px-4">
+        <h1 className="text-xl opacity-70 text-center">Top Enterprises</h1>
+        <InfiniteBrandCarousel />
+      </section>
+
+      {/* FAQ */}
+      <section className="w-full py-16 md:py-24">
+        <FAQ />
+      </section>
+
       {/* CTA Section */}
       <section className="bg-primary py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -192,12 +204,6 @@ export default function HomePage() {
             </Button>
           </Link>
         </div>
-      </section>
-
-      {/* Top Enterprises */}
-      <section className="mt-4 px-4">
-        <h1 className="text-xl opacity-70 text-center">Top Enterprises</h1>
-        <InfiniteBrandCarousel />
       </section>
     </div>
   );
